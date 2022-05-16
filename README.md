@@ -2,7 +2,7 @@
 
 > An awesome project.
 >
->  https://jasenundefined.github.io/gopher-hello/
+>  https://jasenyun.github.io/gopher-hello/
 
 启动
 

@@ -1,18 +1,16 @@
 # Protobuf 语法
 
+## 定义消息
+
 ```protobuf
-// 指定 proto 版本
-synatx = "proto3";
-package HelloPackage;
+syntax = "proto3" // 指定版本号
+package HelloPackage; // 定义包
 
-option go_package=".";
-import "other.proto";
+option go_package=".";// 定义结构体可选项
+import "other.proto";  // 引入其他结构体
 
-// 定义数据结构
-message HelloRequest {
-  string query = 1;
-  int32 page_number = 2;
-  int32 result_per_page = 3;
+message 消息名{
+	// 消息体
 }
 ```
 
@@ -34,7 +32,89 @@ import weak "other.proto";
 
 - option 关键字 是用于定义 proto 文件时进行标注一些列的 options 。 Options 不会改变整个文件声明的含义，但能够影响特定环境下处理方式。它也可用在 message、enum、service 的定义中。
 
- 参考资料：
+## 数据类型
+
+| proto类型 | go类型  | 备注                          | proto类型 | go类型  | 备注                       |
+| :-------- | :------ | :---------------------------- | :-------- | :------ | :------------------------- |
+| double    | float64 |                               | float     | float32 |                            |
+| int32     | int32   |                               | int64     | int64   |                            |
+| uint32    | uint32  |                               | uint64    | uint64  |                            |
+| sint32    | int32   | 适合负数                      | sint64    | int64   | 适合负数                   |
+| fixed32   | uint32  | 固长编码，适合大于2^28的值    | fixed64   | uint64  | 固长编码，适合大于2^56的值 |
+| sfixed32  | int32   | 固长编码                      | sfixed64  | int64   | 固长编码                   |
+| bool      | bool    |                               | string    | string  | UTF8 编码，长度不超过 2^32 |
+| bytes     | []byte  | 任意字节序列，长度不超过 2^32 |           |         |                            |
+
+标量类型如果没有被赋值，则不会被序列化，解析时，会赋予默认值
+
+- strings：空字符串
+- bytes：空序列
+- bools：false
+- 数值类型：0
+
+## 枚举
+
+当 message 结构中的字段需要一组预定义的值时，就可以使用枚举
+
+```protobuf
+syntax = "proto3";
+
+enum GenderType //枚举消息类型，使用enum关键词定义,一个电话类型的枚举类型
+{
+    femail = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+    mail = 1;
+}
+
+message Student {
+	string name;
+	GenderType gender;
+}
+```
+
+- 枚举类型的第一个选项的标识符必须时0
+
+当枚举中出现相同值的标识符时，可以通过开启允许别名 allow_alias
+
+```protobuf
+enum status //枚举消息类型，使用enum关键词定义,一个电话类型的枚举类型
+{
+    option allow_alias = true; // 允许为不同的枚举值赋予相同的标识符
+    unknow = 0; //proto3版本中，首成员必须为0，成员不应有相同的值
+    start = 1;
+    running = 
+}
+```
+
+## 数组类型
+
+数组类型，通过在字段前加 repeated 关键字，标记当前字段是一个数组。
+
+```
+message Msg {
+  // 只要使用repeated标记类型定义，就表示数组类型。
+  repeated int32 arrays = 1;
+}
+```
+
+## Map 类型
+
+语法：map<key_type, value_type> map_field = N;
+
+```protobuf
+syntax = "proto3";
+message Product
+{
+    string name = 1; // 商品名
+    // 定义一个k/v类型，key是string类型，value也是string类型
+    map<string, string> attrs = 2; // 商品属性，键值对
+}
+```
+
+
+
+Proto3 代码风格，可参考：https://developers.google.com/protocol-buffers/docs/style
+
+参考资料：
 
 - https://www.tizi365.com/archives/371.html
 - https://developers.google.com/protocol-buffers/docs/proto3

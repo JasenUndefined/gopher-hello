@@ -1,6 +1,6 @@
 # Protobuf 语法
 
-## 定义消息
+## 定义消息 message
 
 ```protobuf
 syntax = "proto3" // 指定版本号
@@ -100,6 +100,11 @@ message Msg {
 
 语法：map<key_type, value_type> map_field = N;
 
+- `key_type`类型可以是内置的标量类型(除浮点类型和`bytes`)
+- `value_type`可以是除map以外的任意类型
+- map字段不支持`repeated`属性
+- 不要依赖map类型的字段顺序
+
 ```protobuf
 syntax = "proto3";
 message Product
@@ -112,7 +117,40 @@ message Product
 
 
 
-Proto3 代码风格，可参考：https://developers.google.com/protocol-buffers/docs/style
+## 定义服务 service 
+
+在 RPC 中，可以直接使用 protobuf 来定义 rpc 服务接口
+
+```protobuf
+service HelloService {
+	rpc sayHello(HellpRequest) return (HelloResponse);
+}
+```
+
+官方仓库也提供了一个[插件列表](https://github.com/protocolbuffers/protobuf/blob/master/docs/third_party.md)，帮助开发基于 Protocol Buffer 的 RPC 服务。
+
+## 基本规范
+
+- 文件以  .proto 为后缀，除了结构定义外的语句以分号结尾
+  - 结构定义：message 、service 、enum
+  - rpc 方法定义结尾的分号可有可无
+
+- message 命名是 驼峰命名方式，字段命名采用小写字母加下划线分隔方式
+- Enums类型名采用驼峰命名方式，字段命名采用大写字母加下划线分隔方式
+- Service名称与RPC方法名统一采用驼峰式命名
+
+```protobuf
+message HelloRequest {
+	string person_name = 1;
+}
+
+enum FooType {
+	FIRST_VALUE = 1;
+	SECOND_VALUE = 2;
+}
+```
+
+更多 proto3 代码风格，可参考：https://developers.google.com/protocol-buffers/docs/style
 
 参考资料：
 

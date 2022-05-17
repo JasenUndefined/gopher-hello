@@ -8,7 +8,7 @@
   - [03-生成各语言库](./protobuf/02-生成各语言类库.md)
   - [04-实践protobuf](./protobuf/03-实践protobuf.md)
 - Kubernetes
-  - [01-初识Kubernetes](01-kubernetes.md)
+  - [01-初识Kubernetes](./kubernetes/01-kubernetes.md)
 - step-up
 
 - 设计模式

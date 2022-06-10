@@ -1,4 +1,4 @@
-## 01- UserId 认证— OIDC 介绍
+## 用户ID 认证-OIDC
 
 ## 身份认证
 
@@ -76,7 +76,18 @@ OIDC 执行身份验证过程是为了让 End-User 登录或确定 End-User是�
 
 OAuth2.0 授权框架中提供了这些协议中使用的授权 Web API 的定义。此 API 需要 response_type 作为强制请求参数。 OIDC 认证流程是根据  response_type 参数值的 code ，toke ，id token 组合定义的。
 
-OIDC 认证由三种方式：
+ OIDC 的三种认证方式，主要根据响应类型 response_type 划分：
+
+- 授权码模式
+  - response_type = code
+  - 该模式是基于传统的 Oauth2.0 模式设计的
+- Implicit模式
+  - response_type = id_token
+  - response_type = id_token token
+- Hybrid 模式
+  - response_type = code token
+  - response_type = code id_token
+  - response_type = code id_token token
 
 #### 授权码模式
 
@@ -85,8 +96,6 @@ OIDC 认证由三种方式：
 该模式时基于传统的 OAuth 模式。
 
 <img src='./images/02-oidc-code.png'/>
-
-
 
 ### Implicit模式
 

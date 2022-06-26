@@ -1,0 +1,93 @@
+在项目中经常会有一些系统配置，可称为环境变量，会影响正在运行的的程序的行为方式。它是进程运行的环境的一部分。在软件开发中，环境变量用于配置应用程序。
+环境变量有文件系统中所有可执行文件的位置、默认 shell 和编辑器或系统区域设置。要在 Go 中使用环境变量，可以使用 os 包或第三方 godotenv 或 viper 库。
+内置系统包
+
+os.Setenv() 设置环境值的值。
+os.Getenv() 获取指定键对应的环境变量值
+os.LookupEnv() 获取指定键对应的环境变量值。如果系统中不存在该变量，则返回值将为空，并且布尔值将为 false。否则，它将返回值（可以为空），并且布尔值为 true。
+
+Go os.GetEnv
+GetEnv 通过 key 检索对应的环境变量值。如果 key 不存在则返回值为空。要区分空值和未设置值，请使用 LookupEnv。
+package main
+
+import (
+    "fmt"
+    "os"
+)
+
+func main() {
+    fmt.Println("Shell:", os.Getenv("SHELL"))
+}
+
+Go os.LookupEnv
+LookupEnv 函数检索由键命名的环境变量的值。 如果设置了变量，则返回值（可能为空）并且布尔值为真。 否则返回值为空，布尔值为假。
+package main
+
+import (
+    "fmt"
+    "os"
+)
+
+func main() {
+
+    getEnv := func(key string) {
+        val, ok := os.LookupEnv(key)
+        if !ok {
+            fmt.Printf("%s not set\n", key)
+        } else {
+            fmt.Printf("%s=%s\n", key, val)
+        }
+    }
+
+    getEnv("EDITOR")
+    getEnv("SHELL")
+}
+
+在代码示例中，我们尝试获取两个环境变量。 如果变量存在，则打印其值； 否则，将显示未设置变量的消息。
+Go os.Setenv
+os.Setenv 设置由键命名的环境变量的值。
+package main
+
+import (
+    "fmt"
+    "os"
+)
+
+func main() {
+
+    fmt.Println("editor:", os.Getenv("EDITOR"))
+
+    os.Setenv("EDITOR", "emacs")
+
+    fmt.Println("editor:", os.Getenv("EDITOR"))
+}
+
+Go 环境变量 list
+os.Environ 返回代表环境的字符串副本，格式为“key=value”。
+package main
+
+import (
+    "fmt"
+    "os"
+    "strings"
+)
+
+func main() {
+
+    for _, e := range os.Environ() {
+
+        pair := strings.SplitN(e, "=", 2)
+        fmt.Printf("%s: %s\n", pair[0], pair[1])
+    }
+}
+
+在代码示例中，我们获得了所有环境变量的列表。 我们使用 SplitN 将字符串切割成键值对。
+Go os.Expandenv
+os.ExpandEnv 是一个辅助函数，它将字符串中的 $var 替换为给定变量的值。 对未定义变量的引用被空字符串替换。
+Go dotenv 库
+在开发机器上，环境变量通常存储在特殊的 .env 文件中。 godotenv 库从 .env 文件加载环境变量。
+
+作者：一名砍柴工
+链接：https://juejin.cn/post/7113144056862998565
+来源：稀土掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

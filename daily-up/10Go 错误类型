@@ -1,0 +1,47 @@
+程序错误和异常
+在我接触的语言 C# 、Java、 NodeJs 开发中，对于异常处理基本都是通过关键字 throw 方式抛出错误，然后通过 try/catch 块来捕获此错误。
+程序错误：指可能出现问题的地方出现了问题，是开发者可意料的。比如打开文件失败。
+程序异常：指不应该出现问题的地方出现了问题，是在开发者的意料之外。比如引用了空指针。
+以下是以 typeScript 为例子：
+try {
+  throw new Error()
+} catch(e){ 
+  console.log(e) // 捕获异常
+}
+基本这类语言都会有内置的 Exception 类型，如 IOException、ClassNotFoundException 等等。Node.js 或 JavaScript 运行时抛出的所有异常都将是 Error 的实例Error。
+Go 只有错误类型
+但是在 Golang 中是没有异常类型，只有错误类型。这句话我的理解是 Go 中没有 try/catch 去捕获未知的错误，大部分的函数调用都会返回错误，然后通过使用返回值来表示异常的状态。
+以下是 Go 语言内置的 error 的接口定义，error 接口中包含 Error 方法，且该方法的返回值是字符串。
+type error interface {
+    Error() string
+}
+error 返回值
+通过多返回值特性，调用方法时需要返回错误，且其是函数的最后一个返回值。当 error 非 nil 时，及时返回错误，从而避免过多的代码嵌套。
+func f() error {
+    result , err := DoFunc();
+    if err != nil {
+        return error;
+    }
+    // ... 	其他逻辑
+}
+errors.New /errors.Errorf 返回错误值
+当调用的函数的函数没有 error 的返回值时，通过返回值的来判断是否需要返回错误值。回错误值可以使用 errors.New 或 errors.Errorf 。
+func f() error {
+    result := DoFunc1();
+    if result!= true {
+         errors.Errorf("结果错误，返回")
+    }
+    // ... 	其他逻辑
+}
+error.WithMessage 携带信息返回错误
+当返回错误时需要携带额外的信息时，可以用 errors.WithMessage。
+func someFunc() error {
+    res, err := anotherFunc()
+    if err != nil {
+        return errors.WithMessage(err, "other information")
+    }
+}
+其他错误处理方式
+● errors.Wrap：调用其他库获取到的错误，使用该方法添加堆栈信息
+● errors.Is：当需要对错误进行判断时，需要采用 error.Is  进行比较
+● errors.As：对错误类型进行判断时则使用 该方法进行赋值

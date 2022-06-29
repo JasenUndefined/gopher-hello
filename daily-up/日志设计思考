@@ -1,0 +1,109 @@
+# 日志设计思考
+
+在很多系统上都会遇到日志类的需求，如记录用户的行为日志，记录浏览记录、操作记录等。审计日志就是日志需求中的一种，也成为审计跟踪，是对事件和更改的记录。通常都是将一系列的动作或特定的活动相关的事件进行记录。
+
+## 数据模型
+
+对于审计日志的数据，最重要的是需要记录行为操作，行为分类等重要的数据，希望便于数据回溯或者行为回溯：
+
+-   事件 ID
+-   事件名称
+-   事件来源
+-   事件类型
+-   事件所在的地域
+-   事件发生结果
+-   事件结果原因
+-   事件操作者
+-   事件操作时间
+
+## 设计方案
+
+### 触发器方案
+
+第一次遇到日志记录是使用 oralce 数据库，通过建立数据库表触发器来记录数据的变化。主要是对数据的增删改三个动作分别建立三个触发器，对需要关注的数据表建立触发器，一旦数据发生变更时都会将变更前后的数据都记录到另外 history_record 记录表。
+
+这种方式虽然简单，但也存在很多局限性：
+
+-   如果是遇到不同的数据库如 pg 、mysql 等都需要重新编写触发器
+-   仅能记录数据的变更，一些其他操作 IP，来源等就无法记录
+-   也会产生有影响性能的可能性
+
+```
+-- user
+create table user {
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar(20),
+  createtime date
+};
+
+-- user_log 
+create table user_log(
+  id int PRIMARY key AUTO_INCREMENT,
+  extValue varchar(200)
+  newValue varchar(200)
+);
+-- insert trigger
+create trigger inser_user_trigger after insert on user
+for EACH row
+begin
+insert into user_log(extValue,newValue) value(ext, NEW);
+end;
+```
+
+### 嵌入业务内记录变更
+
+和业务代码结合，然后在最后 return 响应结果之前将整个记录都记录到日志中
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a97464485e884cf4ab1daae2be0547b2~tplv-k3u1fbpfcp-zoom-1.image)
+
+该方案流程清晰，环环相扣：先查询原值，完成核心业务，如新增/更新/删除操作后之后，再去diff 新老值，将变更的数据都查出然后转换成操作的文本，记录到日志中。但该方案也存在很多问题：
+
+-   与业务代码耦合性太强，对业务流程入侵太大
+-   如果复杂的业务或者需要更详细的审计数据，可能部分数据还需要进行反查。
+
+```
+publict class  UserController {
+  
+  createUser(@Body() data: User){
+    // 业务处理...
+    // 创建加入 db
+    this.userService.createUser(data);
+    
+    // 加入日志
+    addLog(data);
+    return {code:200, message: '创建成功'}
+  }
+  
+  updateUser(@Body() updates: User){
+     // 业务处理...
+    // 获取原始值
+    let originValue =  this.userService.getUserById(user.id)
+    // 更新到 db
+    this.userService.updateUser(data);
+    
+    // diff 差异
+    let diffFields = this.logService.getDiffField(originValue, updates)
+    
+    // 加入日志
+    addLog(diffFields);
+    return {code:200, message: '更新成功'}
+  
+  }
+}
+```
+
+### 其他方式
+
+-   通过前端记录日志
+
+通过埋点的方式，前端监控数据的变更，然后将记录传递给后端服务，由后端服务记录，但是前端记录采集事件行为数据。
+
+-   基于其他第三方工具
+
+现有市场上有很多第三方提供软件进行统一管理。
+
+-   ORM 的拦截
+
+现有的服务基本都是使用 ORM，利用其提供的功能，使用拦截器方式，比如 mybatis 的拦截器。
+
+总之，还是需要根据自己的场景去确定使用的技术方案，大部分可能还是使用嵌入业务方式去拦截然后记录日志。比如 Java 通过注解注入日志拦截，方法执行完之后进入日志拦截器，然后将需要的日志行为和事件记录在日志中。

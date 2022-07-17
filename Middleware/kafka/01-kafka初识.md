@@ -8,8 +8,6 @@ Kafka 是一款基于发布与订阅的消息系统的消息队列。一般称�
 
 ![image-20220618151346610](/Users/jasenyang/Library/Application Support/typora-user-images/image-20220618151346610.png)
 
-
-
 ### 使用场景：
 
 - 活动跟踪
@@ -47,7 +45,9 @@ Kafka 是一款基于发布与订阅的消息系统的消息队列。一般称�
 - 主题 Topic：Kafka 的消息通过主题进行分类。一个主题再划分多个分区。
 
 - 生产者：消息生产者，向 Broker 发送消息的客户端
+
 - 消费者：消息消费者，从 Broker 取消息的客户端
+
 - Broker ：一台 Kafka 机器就是一个 Broker。一个集群由多个 Broker 组成。一个 Broker 可以容纳多个 Topic。
 
 参考资料：

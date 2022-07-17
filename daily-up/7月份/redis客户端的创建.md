@@ -201,14 +201,14 @@ func (credis CacheLocal) Get(key string) interface{} {
 type CLIENT_TYPE string
 
 const (
-	CACHE_REDIS CLIENT_TYPE = "CACHE_REDIS"
-	CACHE_LOCAL             = "CACHE_LOCAL"
+    CACHE_REDIS CLIENT_TYPE = "CACHE_REDIS"
+    CACHE_LOCAL             = "CACHE_LOCAL"
 )
 
 type CacheClient struct {
-	ClientType CLIENT_TYPE
-	CRedis     *CacheRedis
-	CLocal     *CacheLocal
+    ClientType CLIENT_TYPE
+    CRedis     *CacheRedis
+    CLocal     *CacheLocal
 }
 
 var CacheCli *CacheClient
@@ -217,29 +217,29 @@ var lcache *CacheLocal
 
 // 初始化缓存 cli 的函数，用于项目程序启动时使用
 func InitInstance(clientType CLIENT_TYPE) {
-	CacheCli.ClientType = clientType
-	switch clientType {
-	case CACHE_LOCAL:
-		CacheCli.CRedis.Client = NewCacheRedis()
-	case CACHE_REDIS:
-		CacheCli.CLocal.Client = NewCacheRedis()
-	default:
-		break
-	}
+    CacheCli.ClientType = clientType
+    switch clientType {
+    case CACHE_LOCAL:
+        CacheCli.CRedis.Client = NewCacheRedis()
+    case CACHE_REDIS:
+        CacheCli.CLocal.Client = NewCacheRedis()
+    default:
+        break
+    }
 }
 
 func (client *CacheClient) getDriver() ICache {
-	if client.CLocal.Client != nil {
-		return client.CLocal
-	}
-	return client.CRedis
+    if client.CLocal.Client != nil {
+        return client.CLocal
+    }
+    return client.CRedis
 }
 
 func (credis *CacheClient) Set(key string, value interface{}, ttl time.Duration) {
-	credis.getDriver().Set(key, value, ttl)
+    credis.getDriver().Set(key, value, ttl)
 }
 func (credis *CacheClient) Get(key string) interface{} {
-	return credis.getDriver().Get(key)
+    return credis.getDriver().Get(key)
 }
 ```
 
@@ -272,26 +272,18 @@ func main(){
 
 应该还有需要优化的点。暂未想到，欢迎留言指点。
 
-
-
 思考点2：当作一种设计模版，使用于其他的中间件，比如数据库，消息队列，存储服务？
 
 代理模式这种方式适用于多个目标对象的，然后根据不同需求动态切换不同的目标对象。比如多种数据库的时候，可以通过 config 配置数据库类型，动态的初始化对应的数据库。也可以代码上控制不同的类型动态切换不同的数据源。
 
-
-
 思考点3：其他方式实现？
 
 暂时没有想到其他的方式封装 Redis 。如果你有很好的建议可以留言，让我学习学习。
-
-
 
 参考资料：
 
 - [[瞎写个 golang 脚本]03-连接 DB 和 redis - 掘金](https://juejin.cn/post/7084997454772305957)
 - [设计模式之抽象工厂模式：「替换多种缓存，代理抽象场景」](https://www.sparksys.top/archives/42)
 - [代理模式（代理设计模式）详解](http://c.biancheng.net/view/1359.html)
-
-
 
 > 我正在参与掘金技术社区创作者签约计划招募活动，[点击链接报名投稿](https://juejin.cn/post/7112770927082864653 "https://juejin.cn/post/7112770927082864653")。

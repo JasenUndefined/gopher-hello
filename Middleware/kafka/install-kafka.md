@@ -80,7 +80,6 @@ docker-compose up -d
 ```
 $ nc -z localhost 2181
 $ nc -z localhost 9092
-
 ```
 
 此外，我们还可以在容器启动时检查详细日志并验证 Kafka 服务器是否已启动：

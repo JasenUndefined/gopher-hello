@@ -66,8 +66,6 @@ ID Token 符合RFC 7519行业标准并由以下三个部分：
 
 IDToken 的 payload  里也可以包含其他自定义的字段。为了保证 IDToken真实性，ID Token 必须由 OP 使用 JWT 签名。
 
-
-
 ## OIDC 认证流程
 
 接下来，就是 OIDC 的不同认证方式的流程如何工作。
@@ -100,20 +98,16 @@ OAuth2.0 授权框架中提供了这些协议中使用的授权 Web API 的定�
 ### Implicit模式
 
 > response_type = id_token
->
+> 
 > response_type = id_token token
 
 ### Hybrid 模式
 
 > response_type = code token
->
+> 
 > response_type = code id_token
->
+> 
 > response_type = code id_token token
-
-
-
-
 
 参考资料：
 

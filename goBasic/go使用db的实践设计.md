@@ -12,13 +12,7 @@ golang 使用 MongoDB
 
 给你的平台安装 MongoDB 其实很简单。你可以从[这里](https://www.mongodb.com/try/download/shell)获取到各种平台各种版本。选择适合的环境版本进行安装。
 
-## 安装 MongoDB 
-
-
-
-
-
-
+## 安装 MongoDB
 
 ### 安装 MongoDB 的 Golang 包
 
@@ -50,40 +44,25 @@ BSON 就是 Binary JSON ，是类 JSON 文档的二进制编码序列化。 与 
 mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
 ```
 
-- 
-
-可以创建不同形式的 Context 。先创建一个最简单的 Context ，即 `context.TODO()`。
+- 可以创建不同形式的 Context 。先创建一个最简单的 Context ，即 `context.TODO()`。
 
 ```golang
 func InitMongoDB(mongoURL) {
-	ctx := context.TODO()
-	opts := options.Client().ApplyURI(mongoURL)
+    ctx := context.TODO()
+    opts := options.Client().ApplyURI(mongoURL)
 
-	client, err := mongo.Connect(ctx, opts)
-	if err != nil {
-		println("mongodb 连接失败")
-		panic(err)
-	}
+    client, err := mongo.Connect(ctx, opts)
+    if err != nil {
+        println("mongodb 连接失败")
+        panic(err)
+    }
 
-	defer client.Disconnect(ctx)
-	println("mongodb 连接成功")
+    defer client.Disconnect(ctx)
+    println("mongodb 连接成功")
 }
-
 ```
 
 有时可能出现端口不正确
-
-
-
-
-
-
-
-
-
-
-
-
 
 参考资料：
 

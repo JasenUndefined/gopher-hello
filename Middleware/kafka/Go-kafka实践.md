@@ -12,35 +12,17 @@ Kafka 是个开源分布式事件流平台，被很多公司用于高性能数�
 
 - 可扩展性：当系统在高峰时，消息队列可以协助我们需要的场景上进行扩展
 
-
-
-
-
-
-
 通过 REST API 添加消息然后在 Apache 中生成并在消费者/工作者中处理它是一个简单的系统。 它可以是任何耗时的过程，例如保存数据存储并执行聚合或一些计算。
-
-
-
-
-
-
 
 在本地运行 Kafka
 这篇文章中的所有示例都是在我的机器上本地运行的经过测试的 Kafka。 您也可以使用 Docker 和 docker-compose 来实现。
-
-
 
 使用 REST API 编写生产者
 我正在使用 Sarama，它是 Apache Kafka 的 Go 库。 还有其他选择，例如 kafka-go。 一个原因是 sarama 比 kakfa-go 更快，另一个原因是围绕 sarama 去社区，它的代码有助于选择 sarama。
 
 使用 sarama 作为 Producer 连接到 Apache Kafka
 
-
-
 使用 sarama 将评论推送到队列（主题）
 这个函数非常简单，它将主题和消息作为参数，使用上面的函数 ConnectProducer 连接到 kafka 并将该消息推送到给定主题。
-
-
 
 https://medium.com/swlh/apache-kafka-with-golang-227f9f2eb818

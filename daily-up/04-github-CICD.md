@@ -16,25 +16,25 @@ Github Actions 工作流也支持响应 GitHub 上的任何 webhook 事件。那
 name: CI
 
 on:
-	push:
-		branches: [master]
-	pull_request:
-  	branches: [master]
+    push:
+        branches: [master]
+    pull_request:
+      branches: [master]
   workflow_dispatch:
 
 jobs:
-	build:
-		runs-on: ubuntu-latest
-		
-		steps:
-		
-			- name: 
-			  uses:
-			  
-			- name: 
-			  uses:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+
+            - name: 
+              uses:
+
+            - name: 
+              uses:
       - name: 
-			  uses:
+              uses:
 ```
 
 以上的工作流程命令组成各种不同的事情：
@@ -44,8 +44,6 @@ jobs:
 - Jobs 是一系列执行步骤
 - Steps 在作业中运行命令的单个任务。 这些可以是一个动作或一个 shell 命令。
 - Actions 在运行器上执行的命令，也是以它命名的 GitHub Actions 的核心元素。
-
-
 
 参考资料：
 

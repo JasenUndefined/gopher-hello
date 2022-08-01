@@ -1,17 +1,15 @@
 go gin 中间件
 
-
-
 中间件，在正式处理 http 请求之前，进行一层逻辑控制，类似于拦截器。请求前拦截，比如可以进行登录时效验证，或日志记录，或捕获错误等等。但不像 Java 语言，通过注解的方式写在控制器或者方法的之上。在 Go 中是将其用在路由之前的。
 
 在gin 中，直接使用 `gin.Default()` 初始化 gin 对象，其中它包含了一个自带默认中间件的 `*Engine`。观察以下代码，你会发现 Default 方法中默认绑定了2个中间件，Logger 和 Recovery，主要用于打印日志输出和 panic 处理
 
 ```go
 func Default() *Engine {
-	debugPrintWARNINGDefault()
-	engine := New()
-	engine.Use(Logger(), Recovery())
-	return engine
+    debugPrintWARNINGDefault()
+    engine := New()
+    engine.Use(Logger(), Recovery())
+    return engine
 }
 ```
 
@@ -32,9 +30,9 @@ type HandlerFunc func(*Context)
 
 ```go
 func CustomMiddleware() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		ctx.String(200, "success")
-	}
+    return func(ctx *gin.Context) {
+        ctx.String(200, "success")
+    }
 }
 
 // 使用
@@ -50,14 +48,13 @@ Next() 方法
 
 Next() 只允许在中间件函数中使用，用于挂起请求业务逻辑处理。即**当前中间件中调用`c.Next()`时会中断当前中间件中后续的逻辑，转而执行后续的中间件和handlers，等他们全部执行完以后再回来执行当前中间件的后续代码。**
 
-````go
+```go
 func CustomMiddleware() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		println("hello before")
-		ctx.Next()
-		println("hello after")
-		ctx.String(200, "success")
-	}
+    return func(ctx *gin.Context) {
+        println("hello before")
+        ctx.Next()
+        println("hello after")
+        ctx.String(200, "success")
+    }
 }
-````
-
+```

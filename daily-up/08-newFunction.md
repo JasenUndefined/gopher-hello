@@ -8,15 +8,13 @@
 
 ```typescript
 String.prototype.interpolate = function(){
-	.....
-	.....
-	const names =[...]
-	const values = [...]
-	return new Function(...names, `return \`${this}\`;`)(...values);
+    .....
+    .....
+    const names =[...]
+    const values = [...]
+    return new Function(...names, `return \`${this}\`;`)(...values);
 }
 ```
-
-
 
 ## 函数定义
 
@@ -26,7 +24,7 @@ String.prototype.interpolate = function(){
 
 ```javascript
 function func_name(arg1,arg2...){
-		// body :to do something
+        // body :to do something
 }
 ```
 
@@ -34,11 +32,11 @@ function func_name(arg1,arg2...){
 
 ```javascript
 let getUserInfo = function(id) {
-	...
+    ...
 }
 ```
 
-##  new Function 定义函数
+## new Function 定义函数
 
 在 ES6 的模板字符串的案例中有一个创建函数的语法是这样的：
 
@@ -75,16 +73,8 @@ getUser()() // 这样执行时将报错，value 未定义
 
 // 如果定义 value 后,则可以政策执行
 let value = “我是全局 Tom”;
-
 ```
-
-
-
-
-
-
 
 参考资料：
 
 - https://blog.csdn.net/qq_34629352/article/details/119848863
-

@@ -1,4 +1,4 @@
-使用 Makefile 来构建 Golang 项目
+# 使用 Makefile 来构建 Golang 项目
 
 构建和测试大型项目时都会很耗时，且容易出错。开发者在开发过程中需要不断执行go build、go run 、go test等相关命令。还可能需要多个命令来构建不同平台的二进制文件。在正式部署时候，我们可能还需要安装一些依赖项，或者在发布之前进行代码覆盖率测试等相关前置工作。
 
@@ -139,7 +139,6 @@ vet:
 
 lint:
  golangci-lint run --enable-all
-
 ```
 
 使用这个简单的 Makefile，您现在可以轻松地执行命令来运行任务。这样就轻松自动化解决工作。
@@ -152,16 +151,8 @@ make vet
 make lint
 ```
 
-
-
-
-
-
-
 参考资料：
 
 - [使用makefile构建golang项目_风花雪月无情王的博客-CSDN博客_golang makefile](https://blog.csdn.net/u010230971/article/details/80335613)
 
 - [Makefiles for Go Developers | TutorialEdge.net](https://tutorialedge.net/golang/makefiles-for-go-developers/)
-
-

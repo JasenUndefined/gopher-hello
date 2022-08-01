@@ -30,11 +30,11 @@ package main
 import "github.com/gin-gonic/gin"
 
 func main() {
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.String(200, "Hello, Geektutu")
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+    r := gin.Default()
+    r.GET("/", func(c *gin.Context) {
+        c.String(200, "Hello, Geektutu")
+    })
+    r.Run() // listen and serve on 0.0.0.0:8080
 }
 ```
 
@@ -46,10 +46,10 @@ func main() {
 
 ```go
 func Default() *Engine {
-	debugPrintWARNINGDefault()
-	engine := New()
-	engine.Use(Logger(), Recovery())
-	return engine
+    debugPrintWARNINGDefault()
+    engine := New()
+    engine.Use(Logger(), Recovery())
+    return engine
 }
 ```
 
@@ -62,12 +62,12 @@ func Default() *Engine {
 
 ```go
 func debugPrintWARNINGDefault() {
-	if v, e := getMinVer(runtime.Version()); e == nil && v <= ginSupportMinGoVer {
-		debugPrint(`[WARNING] Now Gin requires Go 1.13+.
+    if v, e := getMinVer(runtime.Version()); e == nil && v <= ginSupportMinGoVer {
+        debugPrint(`[WARNING] Now Gin requires Go 1.13+.
 
 `)
-	}
-	debugPrint(`[WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+    }
+    debugPrint(`[WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
 
 `)
 }
@@ -81,31 +81,31 @@ func debugPrintWARNINGDefault() {
 
 ```go
 func New() *Engine {
-	debugPrintWARNINGNew()
-	engine := &Engine{
-		RouterGroup: RouterGroup{
-			Handlers: nil,
-			basePath: "/",
-			root:     true,
-		},
-		FuncMap:                template.FuncMap{},
-		RedirectTrailingSlash:  true,
-		RedirectFixedPath:      false,
-		HandleMethodNotAllowed: false,
-		ForwardedByClientIP:    true,
-		AppEngine:              defaultAppEngine,
-		UseRawPath:             false,
-		UnescapePathValues:     true,
-		MaxMultipartMemory:     defaultMultipartMemory,
-		trees:                  make(methodTrees, 0, 9),
-		delims:                 render.Delims{Left: "{{", Right: "}}"},
-		secureJsonPrefix:       "while(1);",
-	}
-	engine.RouterGroup.engine = engine
-	engine.pool.New = func() interface{} {
-		return engine.allocateContext()
-	}
-	return engine
+    debugPrintWARNINGNew()
+    engine := &Engine{
+        RouterGroup: RouterGroup{
+            Handlers: nil,
+            basePath: "/",
+            root:     true,
+        },
+        FuncMap:                template.FuncMap{},
+        RedirectTrailingSlash:  true,
+        RedirectFixedPath:      false,
+        HandleMethodNotAllowed: false,
+        ForwardedByClientIP:    true,
+        AppEngine:              defaultAppEngine,
+        UseRawPath:             false,
+        UnescapePathValues:     true,
+        MaxMultipartMemory:     defaultMultipartMemory,
+        trees:                  make(methodTrees, 0, 9),
+        delims:                 render.Delims{Left: "{{", Right: "}}"},
+        secureJsonPrefix:       "while(1);",
+    }
+    engine.RouterGroup.engine = engine
+    engine.pool.New = func() interface{} {
+        return engine.allocateContext()
+    }
+    return engine
 }
 ```
 
@@ -116,10 +116,10 @@ func New() *Engine {
 type HandlersChain []HandlerFunc
 
 type RouterGroup struct {
-	Handlers HandlersChain
-	basePath string
-	engine   *Engine
-	root     bool
+    Handlers HandlersChain
+    basePath string
+    engine   *Engine
+    root     bool
 }
 ```
 
@@ -150,14 +150,14 @@ type RouterGroup struct {
 
 ```go
 func (group *RouterGroup) GET(relativePath string, handlers ...HandlerFunc) IRoutes {
-	return group.handle(http.MethodGet, relativePath, handlers)
+    return group.handle(http.MethodGet, relativePath, handlers)
 }
 
 func (group *RouterGroup) handle(httpMethod, relativePath string, handlers HandlersChain) IRoutes {
-	absolutePath := group.calculateAbsolutePath(relativePath)
-	handlers = group.combineHandlers(handlers)
-	group.engine.addRoute(httpMethod, absolutePath, handlers)
-	return group.returnObj()
+    absolutePath := group.calculateAbsolutePath(relativePath)
+    handlers = group.combineHandlers(handlers)
+    group.engine.addRoute(httpMethod, absolutePath, handlers)
+    return group.returnObj()
 }
 ```
 
@@ -167,12 +167,12 @@ GET 方法绑定到 RouterGroup 实体上。然后调用 handle 方法进行路�
 
 ```go
 func (engine *Engine) Run(addr ...string) (err error) {
-	defer func() { debugPrintError(err) }()
+    defer func() { debugPrintError(err) }()
 
-	address := resolveAddress(addr)
-	debugPrint("Listening and serving HTTP on %s\n", address)
-	err = http.ListenAndServe(address, engine)
-	return
+    address := resolveAddress(addr)
+    debugPrint("Listening and serving HTTP on %s\n", address)
+    err = http.ListenAndServe(address, engine)
+    return
 }
 ```
 
@@ -183,13 +183,11 @@ Run方法是将路由器附加到 http.Server 并开始侦听和服务 HTTP 请�
 
 ```go
 func ListenAndServe(addr string, handler Handler) error {
-	server := &Server{Addr: addr, Handler: handler}
-	return server.ListenAndServe()
+    server := &Server{Addr: addr, Handler: handler}
+    return server.ListenAndServe()
 }
 ```
 
 这就是 Go 语言的特性， 如果某个结构体实现了 interface 定义声明的那些方法，那么就可以认为这个结构体实现了 interface。结构体 Engine 是实现了`Handler`接口的 `ServeHTTP` 方法的，也就是符合 `http.Handler` 接口标准。
-
-
 
 参考资料：https://golang2.eddycjy.com/posts/ch2/01-simple-server/

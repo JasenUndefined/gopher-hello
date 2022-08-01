@@ -10,13 +10,9 @@ Unable to retrieve version information from Elasticsearch nodes. socket hang up
 
 配置的路径没有正确读取到配置文件
 
-
-
 查看 elasticsearch 的IP
 
 docker inspect elasticsearch | grep IPAddress
-
-
 
 使用root 权限进入 docker 的容器内
 

@@ -83,14 +83,14 @@ func readSum() int {
 
 ```go
 func run() {
-	var wg sync.WaitGroup
-	wg.Add(100)
-	for i := 0; i < 100; i++ {
-		go func() {
-			defer wg.Done()
-			add(10)
-		}()
-	}
+    var wg sync.WaitGroup
+    wg.Add(100)
+    for i := 0; i < 100; i++ {
+        go func() {
+            defer wg.Done()
+            add(10)
+        }()
+    }
     wg.Wait()
 }
 ```
@@ -127,30 +127,28 @@ sync.Once 适用于创建某个对象的单例、只加载一次的资源等只�
 
 ```go
 func run() {
-	cond := sync.NewCond(&sync.Mutex{})
-	var wg sync.WaitGroup
-	wg.Add(101)
-	for i := 0; i < 100; i++ {
-		go func(num int) {
-			defer wg.Done()
-			fmt.Println(num, "号正在 awaiting......")
-			cond.L.Lock()
-			cond.Wait() //等待所有协程准备完成
-			fmt.Println(num, "号开始跑……")
-			cond.L.Unlock()
-		}(i)
-	}
-	// 等待所有的协程都进入 wait 状态
-	time.Sleep(2*time.Second)
-	go func() {
-		defer wg.Done()
-		// 所有都准备完成，开始
-		cond.Broadcast()
-	}()
-	
-	// 防止函数提前返回退出
-	wg.Wait()
+    cond := sync.NewCond(&sync.Mutex{})
+    var wg sync.WaitGroup
+    wg.Add(101)
+    for i := 0; i < 100; i++ {
+        go func(num int) {
+            defer wg.Done()
+            fmt.Println(num, "号正在 awaiting......")
+            cond.L.Lock()
+            cond.Wait() //等待所有协程准备完成
+            fmt.Println(num, "号开始跑……")
+            cond.L.Unlock()
+        }(i)
+    }
+    // 等待所有的协程都进入 wait 状态
+    time.Sleep(2*time.Second)
+    go func() {
+        defer wg.Done()
+        // 所有都准备完成，开始
+        cond.Broadcast()
+    }()
+
+    // 防止函数提前返回退出
+    wg.Wait()
 }
 ```
-
-
